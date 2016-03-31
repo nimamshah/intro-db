@@ -1,0 +1,4 @@
+SELECT PEAK
+FROM participated, climbed
+WHERE participated.NAME = 'Mark' AND
+      participated.TRIP_ID = climbed.TRIP_ID;
