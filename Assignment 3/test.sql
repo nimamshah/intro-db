@@ -1,3 +1,2 @@
 SELECT *
-FROM participated
-WHERE participated.NAME = 'MARK';
+FROM climbed;
