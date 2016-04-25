@@ -1,0 +1,25 @@
+CREATE OR REPLACE TRIGGER task1_insert_sighting
+BEFORE INSERT ON SIGHTINGS
+FOR EACH ROW
+  --WHEN (NEW.location NOT IN features.location)
+DECLARE
+  loc features.location%TYPE;
+BEGIN
+  /*WHEN (:NEW.location NOT IN (
+    SELECT location
+    FROM SIGHTINGS
+  ))*/
+  --INSERT INTO FEATURES VALUES (:NEW.location, 'UNKNOWN', NULL, NULL, NULL, NULL);
+  SELECT :NEW.location, 'UNKNOWN', NULL, NULL, NULL, NULL
+  INTO loc
+  FROM features
+  WHERE :NEW.location NOT IN features.location;
+  
+  IF :NEW.location NOT IN features.location THEN
+    dbms_output.put_line('Warning: Insert into the SIGHTINGS table references location ' || :NEW.location || ' that is not found in the database');
+  END IF;
+  /*WHERE :NEW.location NOT IN (
+    SELECT location
+    FROM SIGHTINGS
+  );*/
+END;

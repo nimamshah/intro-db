@@ -1,0 +1,29 @@
+INSERT 
+INTO SIGHTINGS 
+VALUES ('Douglas dustymaiden', 'Person B', 'Double Mountain', TO_DATE('28-Nov-05', 'DD-MON-YY'));
+
+INSERT 
+INTO SIGHTINGS 
+VALUES ('Douglas dustymaiden', 'Person A', 'Shirley Peak', TO_DATE('18-Aug-06', 'DD-MON-YY'));
+
+INSERT 
+INTO SIGHTINGS 
+VALUES ('Douglas dustymaiden', 'Person B', 'Grouse Meadow', TO_DATE('28-Nov-06', 'DD-MON-YY'));
+
+INSERT 
+INTO SIGHTINGS 
+VALUES ('Douglas dustymaiden', 'Person C', 'Grouse Meadow', TO_DATE('16-Aug-06', 'DD-MON-YY'));
+
+INSERT 
+INTO SIGHTINGS 
+VALUES ('Douglas dustymaiden', 'Person A', 'Piute', TO_DATE('17-Feb-07', 'DD-MON-YY'));
+
+
+SELECT * 
+FROM SIGHTINGS
+WHERE PERSON = 'Person A' or PERSON = 'Person B' or PERSON = 'Person C';
+
+
+SELECT *
+FROM FEATURES
+WHERE CLASS = 'UNKNOWN';
