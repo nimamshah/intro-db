@@ -5,45 +5,53 @@ END Domination;
 
 CREATE OR REPLACE PACKAGE BODY Domination AS -- body
   PROCEDURE GetThem (input_person VARCHAR2, percentage NUMBER) AS
-  /*DECLARE 
-    CURSOR flowers_seen IS
-      SELECT name
-      FROM sightings
-      WHERE person = input_person;*/
-  CURSOR flowers_seen_cur IS
-    SELECT name
-    FROM sightings
-    WHERE person = input_person;
+  CURSOR people_cur IS
+    SELECT DISTINCT person
+    FROM sightings;
   
-  flowers_seen_t flowers_seen_cur%ROWTYPE;
-  TYPE flowers_seen_ntt IS TABLE OF flowers_seen_t%TYPE;
-  l_flowers_seen flowers_seen_ntt;
-  /*SELECT name
-  FROM sightings
-  WHERE person = input_person
+  people_t people_cur%ROWTYPE;
+  TYPE people_ntt IS TABLE OF people_t%TYPE;
+  l_people people_ntt;
   
-  INTERSECT 
-  
-  SELECT name
-  FROM sightings*/
-  
+  matches NUMBER;
+  individ NUMBER;
   
   BEGIN
-    OPEN flowers_seen_cur;
-    FETCH flowers_seen_cur BULK COLLECT INTO l_flowers_seen;
-    CLOSE flowers_seen_cur;
+    OPEN people_cur;
+    FETCH people_cur BULK COLLECT INTO l_people;
+    CLOSE people_cur;
     
-    FOR i IN 1..l_flowers_seen.COUNT LOOP
-      dbms_output.put_line(l_flowers_seen(i).name);
+    dbms_output.put_line('These people are ' || percentage*100 || '% dominated by ' || input_person || ':');
+    FOR i IN 1..l_people.COUNT LOOP
+      --dbms_output.put_line('Current person: ' || l_people(i).person);
+      
+      -- Count flowers in common for input_person and other people
+      SELECT COUNT(name)
+      INTO matches
+      FROM
+        (SELECT DISTINCT sightings.name, sightings.person
+        FROM sightings
+        INNER JOIN 
+          (SELECT name
+          FROM sightings
+          WHERE person = input_person) curr_person_sightings
+        ON sightings.name = curr_person_sightings.name)
+      WHERE person = l_people(i).person;
+      --dbms_output.put_line('Matches: ' || matches);
+      
+      SELECT COUNT(name)
+      INTO individ
+      FROM 
+        (SELECT DISTINCT name, person
+        FROM sightings)
+      WHERE person = l_people(i).person;
+      --dbms_output.put_line('Individual: ' || individ);
+      
+      IF matches/individ >= percentage THEN
+        dbms_output.put_line(l_people(i).person);
+      END IF;
+      
     END LOOP;
-    
-    /*SELECT
-    INTO
-    FROM sightings
-    WHERE 
-    SELECT name
-    FROM sightings
-    WHERE person = input_person;*/
     
   END;
 END Domination;
