@@ -12,7 +12,7 @@ BEGIN
   --INSERT INTO FEATURES VALUES (:NEW.location, 'UNKNOWN', NULL, NULL, NULL, NULL);
   SELECT :NEW.location, 'UNKNOWN', NULL, NULL, NULL, NULL
   INTO loc
-  FROM features
+  FROM :NEW
   WHERE :NEW.location NOT IN features.location;
   
   IF :NEW.location NOT IN features.location THEN

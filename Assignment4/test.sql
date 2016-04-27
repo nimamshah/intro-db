@@ -1,2 +1,1 @@
-SELECT DISTINCT location
-FROM features;
+EXECUTE Domination.GetThem ('Brad', .3);
